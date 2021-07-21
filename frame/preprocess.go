@@ -3,7 +3,16 @@ package frame
 
 import "image"
 
+type PreprocessParams struct {
+	ReducedFrame int
+}
+
 func Preprocess(frame image.Image) image.Image {
-	reducedFrame := Reduce(frame)
-	return reducedFrame
+
+	preprocessParams := PreprocessParams{}
+	preprocessParams.ReducedFrame = 400
+
+	reducedFrame := Reduce(frame, preprocessParams.ReducedFrame)
+	grayFrame := ToGray(reducedFrame)
+	return grayFrame
 }

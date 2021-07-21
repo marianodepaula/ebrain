@@ -41,32 +41,41 @@ func Read() {
 	framesFiles := make([]string, 0)
 	framesFiles = utils.GetFiles(videoPaths.sourceFramesFolder, framesFiles)
 
+	skipIndex := 0
 	for i, f := range framesFiles {
-		f, err := os.Open(videoPaths.sourceFramesFolder + f)
-		if err != nil {
-			panic("Frame file not found")
+		if skipIndex > 2 {
+			loadFrame(i, videoPaths, f)
 		}
 
-		imageData, err := png.Decode(f)
+		skipIndex++
+	}
+}
+
+func loadFrame(index int, videoPaths VideoPaths, fileName string) {
+	f, err := os.Open(videoPaths.sourceFramesFolder + fileName)
+	if err != nil {
+		panic("Frame file not found")
+	}
+
+	imageData, err := png.Decode(f)
+	defer f.Close()
+	if err != nil {
+		panic("Source frame not found")
+	}
+
+	reducedFrame := frame.Preprocess(imageData)
+
+	if index == 99 {
+		f, err := os.Create("img.jpg")
+		if err != nil {
+			panic(err)
+		}
+
 		defer f.Close()
+
+		err = jpeg.Encode(f, reducedFrame, nil)
 		if err != nil {
-			panic("Source frame not found")
-		}
-
-		reducedFrame := frame.Preprocess(imageData)
-
-		if i == 99 {
-			f, err := os.Create("img.jpg")
-			if err != nil {
-				panic(err)
-			}
-
-			defer f.Close()
-
-			err = jpeg.Encode(f, reducedFrame, nil)
-			if err != nil {
-				panic(err)
-			}
+			panic(err)
 		}
 	}
 }
