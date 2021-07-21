@@ -4,15 +4,24 @@ package frame
 import "image"
 
 type PreprocessParams struct {
-	ReducedFrame int
+	CropLeft          int
+	CropTop           int
+	CropRight         int
+	CropBottom        int
+	ReducedFrameWidth int
 }
 
 func Preprocess(frame image.Image) image.Image {
+	//Set preprocess params here
+	pp := PreprocessParams{}
+	pp.ReducedFrameWidth = 600
+	pp.CropLeft = 250
+	pp.CropTop = 380
+	pp.CropRight = 180
+	pp.CropBottom = 50
 
-	preprocessParams := PreprocessParams{}
-	preprocessParams.ReducedFrame = 400
-
-	reducedFrame := Reduce(frame, preprocessParams.ReducedFrame)
+	croppedFrame := Crop(frame, pp.CropLeft, pp.CropTop, pp.CropRight, pp.CropBottom)
+	reducedFrame := Reduce(croppedFrame, pp.ReducedFrameWidth)
 	grayFrame := ToGray(reducedFrame)
 	return grayFrame
 }

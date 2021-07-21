@@ -45,6 +45,7 @@ func Read() {
 	for i, f := range framesFiles {
 		if skipIndex > 2 {
 			loadFrame(i, videoPaths, f)
+			skipIndex = 0
 		}
 
 		skipIndex++
@@ -63,9 +64,9 @@ func loadFrame(index int, videoPaths VideoPaths, fileName string) {
 		panic("Source frame not found")
 	}
 
-	reducedFrame := frame.Preprocess(imageData)
+	ppFrame := frame.Preprocess(imageData)
 
-	if index == 99 {
+	if index == 3 {
 		f, err := os.Create("img.jpg")
 		if err != nil {
 			panic(err)
@@ -73,7 +74,7 @@ func loadFrame(index int, videoPaths VideoPaths, fileName string) {
 
 		defer f.Close()
 
-		err = jpeg.Encode(f, reducedFrame, nil)
+		err = jpeg.Encode(f, ppFrame, nil)
 		if err != nil {
 			panic(err)
 		}

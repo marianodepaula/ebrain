@@ -23,7 +23,7 @@ func ToGray(frame image.Image) image.Image {
 			r = float32(R / 257)
 			g = float32(G / 257)
 			b = float32(B / 257)
-			l := uint8(0.299*r + 0.587*g + 0.114*b)
+			l := uint8(0.3*r + 0.6*g + 0.1*b)
 
 			grayFrame.Set(x, y, color.Gray{l})
 		}

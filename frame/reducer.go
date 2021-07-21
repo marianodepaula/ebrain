@@ -18,12 +18,9 @@ func Reduce(frame image.Image, reducedWidth int) image.Image {
 	width := frame.Bounds().Max.X
 	height := frame.Bounds().Max.Y
 
-	xinc := width / reducedWidth
+	xinc := float32(width) / float32(reducedWidth)
 	reducedHeight := height * reducedWidth / width
-	yinc := height / reducedHeight
-
-	//fmt.Println("xinc %d", xinc)
-	//fmt.Println("yinc %d", yinc)
+	yinc := float32(height) / float32(reducedHeight)
 
 	xlim := 0
 	ylim := 0
@@ -38,18 +35,18 @@ func Reduce(frame image.Image, reducedWidth int) image.Image {
 	var g uint8 = 0
 	var b uint8 = 0
 
-	for y := 0; y < height; y += yinc {
-		ylim = y
+	for y := float32(0); y < float32(height); y += yinc {
+		ylim = int(y)
 
-		if y > heightdec {
+		if ylim > heightdec {
 			ylim = heightdec
 		}
 
 		xreduced = 0
-		for x := 0; x < width; x += xinc {
-			xlim = x
+		for x := float32(0); x < float32(width); x += xinc {
+			xlim = int(x)
 
-			if x > widthdec {
+			if xlim > widthdec {
 				xlim = widthdec
 			}
 
