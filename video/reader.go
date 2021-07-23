@@ -3,7 +3,7 @@ package video
 
 import (
 	"fmt"
-	"image/jpeg"
+	"image"
 	"image/png"
 	"os"
 	"os/exec"
@@ -24,7 +24,7 @@ type VideoPaths struct {
 	firstFrameFile       string
 }
 
-func Read() {
+func Read() image.Image {
 
 	videoPaths := loadVideoPaths()
 
@@ -41,18 +41,24 @@ func Read() {
 	framesFiles := make([]string, 0)
 	framesFiles = utils.GetFiles(videoPaths.sourceFramesFolder, framesFiles)
 
+	skipFramesAmount := utils.SkipFramesAmount
 	skipIndex := 0
-	for i, f := range framesFiles {
-		if skipIndex > 2 {
-			loadFrame(i, videoPaths, f)
+
+	var ppFrame image.Image
+
+	for _, f := range framesFiles {
+		if skipIndex > skipFramesAmount {
+			ppFrame = loadFrame(videoPaths, f)
 			skipIndex = 0
 		}
 
 		skipIndex++
 	}
+
+	return ppFrame
 }
 
-func loadFrame(index int, videoPaths VideoPaths, fileName string) {
+func loadFrame(videoPaths VideoPaths, fileName string) image.Image {
 	f, err := os.Open(videoPaths.sourceFramesFolder + fileName)
 	if err != nil {
 		panic("Frame file not found")
@@ -64,21 +70,7 @@ func loadFrame(index int, videoPaths VideoPaths, fileName string) {
 		panic("Source frame not found")
 	}
 
-	ppFrame := frame.Preprocess(imageData)
-
-	if index == 3 {
-		f, err := os.Create("img.jpg")
-		if err != nil {
-			panic(err)
-		}
-
-		defer f.Close()
-
-		err = jpeg.Encode(f, ppFrame, nil)
-		if err != nil {
-			panic(err)
-		}
-	}
+	return frame.Preprocess(imageData)
 }
 
 func loadVideoPaths() VideoPaths {
