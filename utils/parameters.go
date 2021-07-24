@@ -19,7 +19,7 @@ func GetPreprocessParams() PreprocessParams {
 	pp.CropLeft = 250
 	pp.CropTop = 380
 	pp.CropRight = 180
-	pp.CropBottom = 50
+	pp.CropBottom = 130
 
 	return pp
 }

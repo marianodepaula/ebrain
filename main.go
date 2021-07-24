@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"image"
 	"image/draw"
+	"strconv"
 
 	"github.com/google/gxui"
 	"github.com/google/gxui/drivers/gl"
@@ -25,7 +26,7 @@ func mainWindow(driver gxui.Driver) {
 
 	theme := dark.CreateTheme(driver)
 	img := theme.CreateImage()
-	window := theme.CreateWindow(width, height, "Image viewer")
+	window := theme.CreateWindow(width, height, "Last Frame preview ("+strconv.Itoa(width)+", "+strconv.Itoa(height)+")")
 	texture := driver.CreateTexture(m, 1.0)
 	img.SetTexture(texture)
 	window.AddChild(img)
