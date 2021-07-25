@@ -14,7 +14,7 @@ func ToGray(frame image.Image) image.Image {
 	var g float32 = 0
 	var b float32 = 0
 
-	grayFrame := image.NewGray(image.Rect(0, 0, width, height))
+	grayFrame := image.NewRGBA(image.Rect(0, 0, width, height))
 
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
@@ -23,7 +23,7 @@ func ToGray(frame image.Image) image.Image {
 			r = float32(R / 257)
 			g = float32(G / 257)
 			b = float32(B / 257)
-			l := uint8(0.3*r + 0.6*g + 0.1*b)
+			l := uint8(0.6*r + 0.3*g + 0.1*b)
 
 			grayFrame.Set(x, y, color.Gray{l})
 		}

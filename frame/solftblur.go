@@ -10,14 +10,15 @@ func Blur(frame image.Image) image.Image {
 	width := frame.Bounds().Max.X
 	height := frame.Bounds().Max.Y
 
-	blurFrame := image.NewGray(image.Rect(0, 0, width, height))
+	blurFrame := image.NewNRGBA(image.Rect(0, 0, width, height))
 
 	var l color.Color
 	var m uint32
-	var w uint32
-	var n uint32
-	var e uint32
-	var s uint32
+	var wr, wg, wb uint32
+	var nr, ng, nb uint32
+	var er, eg, eb uint32
+	var sr, sg, sb uint32
+	var r, g, b uint32
 
 	widthdec := width - 1
 	heightdec := height - 1
@@ -46,17 +47,19 @@ func Blur(frame image.Image) image.Image {
 			_ = m
 
 			l = frame.At(x-1, y)
-			w, _, _, _ = l.RGBA()
+			wr, wg, wb, _ = l.RGBA()
 			l = frame.At(x, y+1)
-			n, _, _, _ = l.RGBA()
+			nr, ng, nb, _ = l.RGBA()
 			l = frame.At(x+1, y)
-			e, _, _, _ = l.RGBA()
+			er, eg, eb, _ = l.RGBA()
 			l = frame.At(x, y-1)
-			s, _, _, _ = l.RGBA()
+			sr, sg, sb, _ = l.RGBA()
 
-			m = (w + n + e + s) / 1028
+			r = (wr + nr + er + sr) / 1028
+			g = (wg + ng + eg + sg) / 1028
+			b = (wb + nb + eb + sb) / 1028
 
-			blurFrame.Set(x, y, color.Gray{uint8(m)})
+			blurFrame.Set(x, y, color.RGBA{uint8(r), uint8(g), uint8(b), 255})
 
 		}
 	}
