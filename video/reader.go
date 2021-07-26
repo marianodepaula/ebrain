@@ -24,12 +24,12 @@ type VideoPaths struct {
 	firstFrameFile       string
 }
 
-func Read() image.Image {
+func Read(out chan<- image.Image) {
 
 	videoPaths := loadVideoPaths()
 
 	if !utils.FileExists(videoPaths.firstFrameFile, videoPaths.sourceFramesFolder) {
-		cmd := exec.Command("ffmpeg", "-i", videoPaths.inputFileName, "-frames:v", "100", videoPaths.sourceFramesFolder+videoPaths.sourceFramesFileName)
+		cmd := exec.Command("ffmpeg", "-i", videoPaths.inputFileName, "-frames:v", "250", videoPaths.sourceFramesFolder+videoPaths.sourceFramesFileName)
 
 		cmd.Stderr = os.Stderr
 		err := cmd.Run()
@@ -41,21 +41,19 @@ func Read() image.Image {
 	framesFiles := make([]string, 0)
 	framesFiles = utils.GetFiles(videoPaths.sourceFramesFolder, framesFiles)
 
-	skipFramesAmount := utils.SkipFramesAmount
 	skipIndex := 0
 
-	var ppFrame image.Image
-
 	for _, f := range framesFiles {
-		if skipIndex > skipFramesAmount {
-			ppFrame = loadFrame(videoPaths, f)
+		if skipIndex >= utils.SkipFramesAmount {
+			out <- loadFrame(videoPaths, f)
+			loadFrame(videoPaths, f)
 			skipIndex = 0
 		}
 
 		skipIndex++
 	}
 
-	return ppFrame
+	close(out)
 }
 
 func loadFrame(videoPaths VideoPaths, fileName string) image.Image {

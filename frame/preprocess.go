@@ -18,9 +18,9 @@ func Preprocess(frame image.Image) image.Image {
 		return frame
 	}
 
-	var bufferFrame image.Image
-	bufferFrame = Crop(frame, pp.CropLeft, pp.CropTop, pp.CropRight, pp.CropBottom)
-	bufferFrame = Reduce(bufferFrame, pp.ReducedFrameWidth)
+	bufferFrame := Crop(frame, pp.CropLeft, pp.CropTop, pp.CropRight, pp.CropBottom)
+	//bufferFrame = Reduce(bufferFrame, pp.ReducedFrameWidth)
+	//bufferFrame = Blur(bufferFrame)
 	//bufferFrame = ToGray(bufferFrame)
 
 	bufferDraw, bounds := shapes.ImageToDrawImage(bufferFrame)
