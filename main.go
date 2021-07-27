@@ -40,11 +40,19 @@ func mainWindow(driver gxui.Driver) {
 	window.AddChild(img)
 	window.OnClose(driver.Terminate)
 
-	pause := time.Millisecond * 5
+	pause := time.Millisecond * 2
 	var timer *time.Timer
+	var t0 int64 = time.Now().UnixNano() / int64(time.Millisecond)
+	var t1 int64
+	var fps int64
+
 	timer = time.AfterFunc(pause, func() {
 		driver.Call(func() {
 			ppImage = <-ppframes
+			t1 = time.Now().UnixNano() / int64(time.Millisecond)
+			fps = 1000 / (t1 - t0)
+			t0 = t1
+			window.SetTitle("Frames preview (" + strconv.Itoa(width) + " x " + strconv.Itoa(height) + ") - FPS: " + strconv.Itoa(int(fps)))
 
 			if ppImage != nil {
 				img := theme.CreateImage()

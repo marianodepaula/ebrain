@@ -16,10 +16,10 @@ func GetPreprocessParams() PreprocessParams {
 	//Set preprocess params here
 	pp := PreprocessParams{}
 	pp.ReducedFrameWidth = 600
-	pp.CropLeft = 250
+	pp.CropLeft = 300
 	pp.CropTop = 380
 	pp.CropRight = 180
-	pp.CropBottom = 130
+	pp.CropBottom = 180
 
 	return pp
 }
