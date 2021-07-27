@@ -10,7 +10,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/luiskeys/ebrain/frame"
 	"github.com/luiskeys/ebrain/utils"
 )
 
@@ -46,7 +45,6 @@ func Read(out chan<- image.Image) {
 	for _, f := range framesFiles {
 		if skipIndex >= utils.SkipFramesAmount {
 			out <- loadFrame(videoPaths, f)
-			loadFrame(videoPaths, f)
 			skipIndex = 0
 		}
 
@@ -68,7 +66,7 @@ func loadFrame(videoPaths VideoPaths, fileName string) image.Image {
 		panic("Source frame not found")
 	}
 
-	return frame.Preprocess(imageData)
+	return imageData
 }
 
 func loadVideoPaths() VideoPaths {

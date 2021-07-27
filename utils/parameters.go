@@ -10,7 +10,7 @@ type PreprocessParams struct {
 }
 
 //Number of frames to skip per iteration
-const SkipFramesAmount int = 2
+const SkipFramesAmount int = 0
 
 func GetPreprocessParams() PreprocessParams {
 	//Set preprocess params here
