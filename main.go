@@ -35,6 +35,31 @@ func mainWindow(driver gxui.Driver) {
 	go frame.Preprocess2(pp2, pp1)
 	ppImage = <-pp1
 
+	window, theme, width, height := createWindow(ppImage, driver)
+
+	pause := time.Millisecond * 2
+	var timer *time.Timer
+	var t0 int64 = time.Now().UnixNano() / int64(time.Millisecond)
+	var fps int64
+	var maxFPS int64 = 0
+
+	timer = time.AfterFunc(pause, func() {
+		driver.Call(func() {
+			ppImage = <-pp2
+			fps, t0 = getFPS(t0)
+			if fps > maxFPS && fps < 40 {
+				maxFPS = fps
+			}
+
+			updateWindow(window, ppImage, theme, driver, width, height, maxFPS)
+
+			timer.Reset(pause)
+		})
+	})
+}
+
+func createWindow(ppImage image.Image, driver gxui.Driver) (gxui.Window, gxui.Theme, int, int) {
+	// Create window with first frame
 	width, height := ppImage.Bounds().Max.X, ppImage.Bounds().Max.Y
 	m := image.NewRGBA(image.Rect(0, 0, width, height))
 	draw.Draw(m, ppImage.Bounds(), ppImage, image.Point{}, draw.Src)
@@ -46,30 +71,23 @@ func mainWindow(driver gxui.Driver) {
 	img.SetTexture(texture)
 	window.AddChild(img)
 	window.OnClose(driver.Terminate)
+	return window, theme, width, height
+}
 
-	pause := time.Millisecond * 2
-	var timer *time.Timer
-	var t0 int64 = time.Now().UnixNano() / int64(time.Millisecond)
-	var t1 int64
-	var fps int64
+func updateWindow(window gxui.Window, ppImage image.Image, theme gxui.Theme, driver gxui.Driver, width int, height int, maxFPS int64) {
+	window.SetTitle("Frames preview (" + strconv.Itoa(width) + " x " + strconv.Itoa(height) + ") - FPS: " + strconv.Itoa(int(maxFPS)))
 
-	timer = time.AfterFunc(pause, func() {
-		driver.Call(func() {
-			ppImage = <-pp2
-			t1 = time.Now().UnixNano() / int64(time.Millisecond)
-			fps = 1000 / (t1 - t0)
-			t0 = t1
-			window.SetTitle("Frames preview (" + strconv.Itoa(width) + " x " + strconv.Itoa(height) + ") - FPS: " + strconv.Itoa(int(fps)))
+	if ppImage != nil {
+		img := theme.CreateImage()
+		texture := driver.CreateTexture(ppImage, 1.0)
+		img.SetTexture(texture)
+		window.RemoveAll()
+		window.AddChild(img)
+	}
+}
 
-			if ppImage != nil {
-				img := theme.CreateImage()
-				texture := driver.CreateTexture(ppImage, 1.0)
-				img.SetTexture(texture)
-				window.RemoveAll()
-				window.AddChild(img)
-			}
-
-			timer.Reset(pause)
-		})
-	})
+func getFPS(t0 int64) (int64, int64) {
+	t1 := time.Now().UnixNano() / int64(time.Millisecond)
+	fps := 1000 / (t1 - t0)
+	return fps, t1
 }
