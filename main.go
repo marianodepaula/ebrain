@@ -24,12 +24,16 @@ func main() {
 
 func mainWindow(driver gxui.Driver) {
 	var ppImage image.Image
+	// Create process pipeline
+	// Channels
 	read := make(chan image.Image)
-	pp := make(chan image.Image)
-
+	pp1 := make(chan image.Image)
+	pp2 := make(chan image.Image)
+	// Go routines
 	go video.Read(read)
-	go frame.Preprocess(pp, read)
-	ppImage = <-pp
+	go frame.Preprocess1(pp1, read)
+	go frame.Preprocess2(pp2, pp1)
+	ppImage = <-pp1
 
 	width, height := ppImage.Bounds().Max.X, ppImage.Bounds().Max.Y
 	m := image.NewRGBA(image.Rect(0, 0, width, height))
@@ -51,7 +55,7 @@ func mainWindow(driver gxui.Driver) {
 
 	timer = time.AfterFunc(pause, func() {
 		driver.Call(func() {
-			ppImage = <-pp
+			ppImage = <-pp2
 			t1 = time.Now().UnixNano() / int64(time.Millisecond)
 			fps = 1000 / (t1 - t0)
 			t0 = t1
