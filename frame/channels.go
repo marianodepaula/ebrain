@@ -1,3 +1,5 @@
+//Color channels filter
+//Code looks redundant but in this way 3 conditionals per pixel are avoided
 package frame
 
 import (

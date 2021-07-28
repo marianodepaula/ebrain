@@ -51,6 +51,7 @@ func Read(out chan<- image.Image) {
 		skipIndex++
 	}
 
+	out <- nil
 	close(out)
 }
 
