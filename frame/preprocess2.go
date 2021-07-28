@@ -6,7 +6,6 @@ import (
 )
 
 func Preprocess2(out chan<- image.Image, in <-chan image.Image) {
-	var bufferFrame image.Image
 	for frame := range in {
 		if frame == nil {
 			out <- nil
@@ -18,7 +17,16 @@ func Preprocess2(out chan<- image.Image, in <-chan image.Image) {
 			out <- frame
 		}
 
-		bufferFrame = GetChannels(frame, true, true, false)
+		bufferFrame := GetChannels(frame, true, true, false)
+
 		out <- bufferFrame
 	}
 }
+
+/*
+var bufferFrame image.Image
+pp := utils.GetPreprocessParams()
+drawFrame, bounds := shapes.ImageToDrawImage(bufferFrame)
+c := color.RGBA{0, 0, 255, 255}
+shapes.DrawGrid(drawFrame, bounds, pp.CellSize, c)
+*/

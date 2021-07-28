@@ -7,6 +7,7 @@ type PreprocessParams struct {
 	CropRight         int
 	CropBottom        int
 	ReducedFrameWidth int
+	CellSize          int
 }
 
 //Number of frames to skip per iteration
@@ -20,6 +21,7 @@ func GetPreprocessParams() PreprocessParams {
 	pp.CropTop = 380
 	pp.CropRight = 180
 	pp.CropBottom = 180
+	pp.CellSize = 30
 
 	return pp
 }

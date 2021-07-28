@@ -27,8 +27,3 @@ func Preprocess1(out chan<- image.Image, in <-chan image.Image) {
 		out <- bufferFrame
 	}
 }
-
-//	bufferDraw, bounds := shapes.ImageToDrawImage(bufferFrame)
-//	draw.Draw(bufferDraw, bufferDraw.Bounds(), bufferFrame, bounds.Min, draw.Src)
-//	lineColor := color.RGBA{255, 0, 0, 255}
-//	shapes.DrawLine(bufferDraw, 10, 10, 100, 100, lineColor)
