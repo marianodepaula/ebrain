@@ -3,9 +3,13 @@ package frame
 
 import (
 	"image"
+
+	"github.com/luiskeys/ebrain/utils"
 )
 
 func Preprocess2(out chan<- image.Image, in <-chan image.Image) {
+	q := utils.GetPreprocessParams().HorGradientQuantum
+
 	for frame := range in {
 		if frame == nil {
 			out <- nil
@@ -17,7 +21,7 @@ func Preprocess2(out chan<- image.Image, in <-chan image.Image) {
 			out <- frame
 		}
 
-		bufferFrame := GetChannels(frame, true, true, false)
+		bufferFrame := GetHorGradient(frame, q)
 
 		out <- bufferFrame
 	}

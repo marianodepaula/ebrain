@@ -2,12 +2,13 @@
 package utils
 
 type PreprocessParams struct {
-	CropLeft          int
-	CropTop           int
-	CropRight         int
-	CropBottom        int
-	ReducedFrameWidth int
-	CellSize          int
+	CropLeft           int
+	CropTop            int
+	CropRight          int
+	CropBottom         int
+	ReducedFrameWidth  int
+	CellSize           int
+	HorGradientQuantum int64
 }
 
 //Number of frames to skip per iteration
@@ -22,6 +23,7 @@ func GetPreprocessParams() PreprocessParams {
 	pp.CropRight = 180
 	pp.CropBottom = 180
 	pp.CellSize = 30
+	pp.HorGradientQuantum = 20000
 
 	return pp
 }
