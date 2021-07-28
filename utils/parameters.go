@@ -23,7 +23,7 @@ func GetPreprocessParams() PreprocessParams {
 	pp.CropRight = 180
 	pp.CropBottom = 180
 	pp.CellSize = 30
-	pp.HorGradientQuantum = 20000
+	pp.HorGradientQuantum = 15000
 
 	return pp
 }
