@@ -41,17 +41,19 @@ func mainWindow(driver gxui.Driver) {
 	var timer *time.Timer
 	var t0 int64 = time.Now().UnixNano() / int64(time.Millisecond)
 	var fps int64
-	var maxFPS int64 = 0
+	counter := 0
 
 	timer = time.AfterFunc(pause, func() {
 		driver.Call(func() {
 			ppImage = <-pp2
 			fps, t0 = getFPS(t0)
-			if fps > maxFPS && fps < 40 {
-				maxFPS = fps
+
+			updateWindow(window, ppImage, theme, driver, width, height, fps, counter)
+			if counter == 10 {
+				counter = 0
 			}
 
-			updateWindow(window, ppImage, theme, driver, width, height, maxFPS)
+			counter++
 
 			timer.Reset(pause)
 		})
@@ -74,8 +76,11 @@ func createWindow(ppImage image.Image, driver gxui.Driver) (gxui.Window, gxui.Th
 	return window, theme, width, height
 }
 
-func updateWindow(window gxui.Window, ppImage image.Image, theme gxui.Theme, driver gxui.Driver, width int, height int, maxFPS int64) {
-	window.SetTitle("Frames preview (" + strconv.Itoa(width) + " x " + strconv.Itoa(height) + ") - FPS: " + strconv.Itoa(int(maxFPS)))
+func updateWindow(window gxui.Window, ppImage image.Image, theme gxui.Theme, driver gxui.Driver, width int, height int, maxFPS int64, counter int) {
+
+	if counter == 10 {
+		window.SetTitle("Frames preview (" + strconv.Itoa(width) + " x " + strconv.Itoa(height) + ") - FPS: " + strconv.Itoa(int(maxFPS)))
+	}
 
 	if ppImage != nil {
 		img := theme.CreateImage()

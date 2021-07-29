@@ -6,7 +6,7 @@ import (
 	"image/color"
 )
 
-func GetNegative(frame image.Image) image.Image {
+func Negative(frame image.Image) image.Image {
 	width := frame.Bounds().Max.X
 	height := frame.Bounds().Max.Y
 

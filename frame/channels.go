@@ -7,7 +7,7 @@ import (
 	"image/color"
 )
 
-func GetChannels(frame image.Image, red bool, green bool, blue bool) image.Image {
+func Channels(frame image.Image, red bool, green bool, blue bool) image.Image {
 	width := frame.Bounds().Max.X
 	height := frame.Bounds().Max.Y
 

@@ -6,7 +6,7 @@ import (
 	"image/color"
 )
 
-func ToGray(frame image.Image) image.Image {
+func Gray(frame image.Image) image.Image {
 	width := frame.Bounds().Max.X
 	height := frame.Bounds().Max.Y
 

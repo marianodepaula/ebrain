@@ -43,7 +43,7 @@ func Read(out chan<- image.Image) {
 	skipIndex := 0
 
 	for i, f := range framesFiles {
-		if skipIndex >= utils.SkipFramesAmount && i < 10 {
+		if skipIndex >= utils.SkipFramesAmount && i < 1000 {
 			out <- loadFrame(videoPaths, f)
 			skipIndex = 0
 		}
