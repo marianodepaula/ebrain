@@ -2,6 +2,7 @@
 package utils
 
 type PreprocessParams struct {
+	MaxFramesToPlay   int
 	ByPassPreprocess1 bool
 	ByPassPreprocess2 bool
 	CropLeft          int
@@ -20,6 +21,7 @@ const SkipFramesAmount int = 0
 func GetPreprocessParams() PreprocessParams {
 	//Set preprocess params here
 	pp := PreprocessParams{}
+	pp.MaxFramesToPlay = 20
 	pp.ByPassPreprocess1 = false
 	pp.ByPassPreprocess2 = false
 	pp.ReducedFrameWidth = 600

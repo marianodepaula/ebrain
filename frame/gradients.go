@@ -42,3 +42,41 @@ func HorizGrad(frame image.Image, quantum int64) image.Image {
 
 	return gradientFrame
 }
+
+func VertGrad(frame image.Image, quantum int64) image.Image {
+	width := frame.Bounds().Max.X
+	height := frame.Bounds().Max.Y
+	var n, s uint32
+	var r, g, b uint32
+
+	gradientFrame := image.NewRGBA(image.Rect(0, 0, width, height))
+	var col color.Color = color.Black
+	var colgrad color.Color = color.RGBA{0, 255, 0, 255}
+	var ni, si int64
+
+	for y := 1; y < height-1; y++ {
+		for x := 1; x < width-1; x++ {
+			r, g, b, _ = frame.At(x, y-1).RGBA()
+			n = r + g + b
+
+			r, g, b, _ = frame.At(x, y+1).RGBA()
+			s = r + g + b
+
+			ni = int64(n)
+			si = int64(s)
+
+			col = color.Black
+
+			if (ni - si) > quantum {
+				col = colgrad
+			}
+			if (si - ni) > quantum {
+				col = colgrad
+			}
+
+			gradientFrame.Set(x, y, col)
+		}
+	}
+
+	return gradientFrame
+}

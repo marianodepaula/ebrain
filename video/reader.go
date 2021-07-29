@@ -41,9 +41,10 @@ func Read(out chan<- image.Image) {
 	framesFiles = utils.GetFiles(videoPaths.sourceFramesFolder, framesFiles)
 
 	skipIndex := 0
+	maxFrames := utils.GetPreprocessParams().MaxFramesToPlay
 
 	for i, f := range framesFiles {
-		if skipIndex >= utils.SkipFramesAmount && i < 20 {
+		if skipIndex >= utils.SkipFramesAmount && i < maxFrames {
 			out <- loadFrame(videoPaths, f)
 			skipIndex = 0
 		}
