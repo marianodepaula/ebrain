@@ -1,4 +1,4 @@
-//Frames preprocess 2
+//Frames preprocess 3
 package frame
 
 import (
@@ -8,9 +8,9 @@ import (
 	"github.com/luiskeys/ebrain/utils"
 )
 
-func Preprocess2(out chan<- image.Image, in <-chan image.Image) {
-	bpp := utils.GetPreprocessParams().ByPassPreprocess2
-	q := utils.GetPreprocessParams().HorizGradQuantum
+func Preprocess3(out chan<- image.Image, in <-chan image.Image) {
+	bpp := utils.GetPreprocessParams().ByPassPreprocess3
+	col := color.RGBA{0, 255, 0, 255}
 
 	for frame := range in {
 		if frame == nil {
@@ -28,11 +28,10 @@ func Preprocess2(out chan<- image.Image, in <-chan image.Image) {
 				out <- frame
 			} else {
 				//Proces here
-				vertGradFrame := VertGrad(frame, q)
-				horizGradFrame := HorizGrad(frame, q)
-				col := color.RGBA{0, 255, 0, 255}
-				gradFrame := Merge(horizGradFrame, vertGradFrame, col)
-				out <- gradFrame
+				horizLinesFrame := FindHorizLines(frame, col)
+				vertLinesFrame := FindVertLines(frame, col)
+				linesFrame := Merge(horizLinesFrame, vertLinesFrame, col)
+				out <- linesFrame
 			}
 
 		}

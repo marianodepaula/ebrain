@@ -29,11 +29,13 @@ func mainWindow(driver gxui.Driver) {
 	read := make(chan image.Image)
 	pp1 := make(chan image.Image)
 	pp2 := make(chan image.Image)
+	pp3 := make(chan image.Image)
 	// Go routines
 	go video.Read(read)
 	go frame.Preprocess1(pp1, read)
 	go frame.Preprocess2(pp2, pp1)
-	ppImage = <-pp1
+	go frame.Preprocess3(pp3, pp2)
+	ppImage = <-pp3
 
 	window, theme, width, height := createWindow(ppImage, driver)
 
@@ -45,7 +47,7 @@ func mainWindow(driver gxui.Driver) {
 
 	timer = time.AfterFunc(pause, func() {
 		driver.Call(func() {
-			ppImage = <-pp2
+			ppImage = <-pp3
 			fps, t0 = getFPS(t0)
 
 			updateWindow(window, ppImage, theme, driver, width, height, fps, counter)
