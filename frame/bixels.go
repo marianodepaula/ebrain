@@ -15,8 +15,8 @@ func Bixels(frame image.Image, size int) image.Image {
 	var ra, ga, ba uint32 = 0, 0, 0
 	var cellPixCount uint32 = uint32(size * size)
 
-	for y := semiSize; y < height-semiSize; y += size {
-		for x := semiSize; x < width-semiSize; x += size {
+	for y := semiSize; y < height-semiSize+1; y += size {
+		for x := semiSize; x < width-semiSize+1; x += size {
 
 			ra = 0
 			ga = 0
