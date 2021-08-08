@@ -36,7 +36,7 @@ func GetPreprocessParams() PreprocessParams {
 	pp.HorizGradQuantum = 10000
 	pp.ScanY0Perc = 30
 	pp.ScanY1Perc = 60
-	pp.ThersPerc = 26
+	pp.ThersPerc = 12
 
 	return pp
 }
