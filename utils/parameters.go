@@ -24,7 +24,7 @@ const SkipFramesAmount int = 0
 func GetPreprocessParams() PreprocessParams {
 	//Set preprocess params here
 	pp := PreprocessParams{}
-	pp.MaxFramesToPlay = 50
+	pp.MaxFramesToPlay = 5000
 	pp.ByPassPreprocess1 = false
 	pp.ByPassPreprocess2 = false
 	pp.ByPassPreprocess3 = false
@@ -35,8 +35,8 @@ func GetPreprocessParams() PreprocessParams {
 	pp.CellSize = 30
 	pp.HorizGradQuantum = 10000
 	pp.ScanY0Perc = 30
-	pp.ScanY1Perc = 70
-	pp.ThersPerc = 20
+	pp.ScanY1Perc = 60
+	pp.ThersPerc = 26
 
 	return pp
 }
