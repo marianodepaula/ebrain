@@ -28,7 +28,7 @@ func Preprocess1(out chan<- image.Image, in <-chan image.Image) {
 			} else {
 				//Proces here
 				bufferFrame := Crop(frame, pp.CropLeft, pp.CropTop, pp.CropRight, pp.CropBottom)
-				bufferFrame = Blur(bufferFrame)
+				//bufferFrame = Blur(bufferFrame)
 				out <- bufferFrame
 			}
 		}

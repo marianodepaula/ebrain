@@ -10,9 +10,10 @@ import (
 
 func Preprocess3(out chan<- image.Image, in <-chan image.Image) {
 	bpp := utils.GetPreprocessParams().ByPassPreprocess3
-	scanHPerc := utils.GetPreprocessParams().HistoScanHPerc
-	histoThresPerc := utils.GetPreprocessParams().HistoThresPerc
-	col := color.RGBA{255, 0, 0, 255}
+	scanY0Perc := utils.GetPreprocessParams().ScanY0Perc
+	scanY1Perc := utils.GetPreprocessParams().ScanY1Perc
+	thersPerc := utils.GetPreprocessParams().ThersPerc
+	col := color.RGBA{0, 0, 255, 255}
 
 	for frame := range in {
 		if frame == nil {
@@ -30,10 +31,9 @@ func Preprocess3(out chan<- image.Image, in <-chan image.Image) {
 				out <- frame
 			} else {
 				//Proces here
-				levels := HorizHistoLevels(frame, col, scanHPerc, histoThresPerc)
-				scanAreaFrame := ScanArea(frame, col, levels)
-				histoFrame := Overlay(frame, scanAreaFrame, 50)
-				out <- histoFrame
+				scanFrame := ScanByDensity(frame, col, scanY0Perc, scanY1Perc, thersPerc)
+				areaFrame := Overlay(frame, scanFrame, 50)
+				out <- areaFrame
 			}
 
 		}

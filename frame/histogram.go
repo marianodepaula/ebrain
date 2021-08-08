@@ -6,39 +6,6 @@ import (
 	"image/color"
 )
 
-func ScanArea(frame image.Image, col color.Color, levels []int) image.Image {
-	width := frame.Bounds().Max.X
-	height := frame.Bounds().Max.Y
-	px := make([]int, width)
-	boxWidth := width * 20 / 100
-	boxMargin := width * 4 / 100
-
-	scanFrame := image.NewRGBA(image.Rect(0, 0, width, height))
-
-	i := 0
-	for x := 0; x < width; x++ {
-		if levels[x] > 0 {
-			px[i] = x
-			i++
-		}
-	}
-
-	x0p := 0
-	for pi := 0; pi < width; pi++ {
-		x0 := px[pi]
-		if x0 > 0 && x0p <= x0+boxWidth+boxMargin || x0p == 0 {
-			for x := x0 - boxMargin; x < x0+boxWidth+boxMargin; x++ {
-				for y := 0; y < height; y++ {
-					scanFrame.Set(x, y, col)
-				}
-			}
-			x0p = x0
-		}
-	}
-
-	return scanFrame
-}
-
 func HorizHistoLevels(frame image.Image, col color.Color, vertPerc int, histoThresPerc int) []int {
 	width := frame.Bounds().Max.X
 	height := frame.Bounds().Max.Y
