@@ -3,7 +3,6 @@ package frame
 
 import (
 	"image"
-	"image/color"
 
 	"github.com/luiskeys/ebrain/utils"
 )
@@ -28,11 +27,8 @@ func Preprocess2(out chan<- image.Image, in <-chan image.Image) {
 				out <- frame
 			} else {
 				//Proces here
-				vertGradFrame := VertGrad(frame, q)
 				horizGradFrame := HorizGrad(frame, q)
-				col := color.RGBA{0, 255, 0, 255}
-				gradFrame := Merge(horizGradFrame, vertGradFrame, col)
-				out <- gradFrame
+				out <- horizGradFrame
 			}
 
 		}

@@ -13,7 +13,8 @@ type PreprocessParams struct {
 	ReducedFrameWidth int
 	CellSize          int
 	HorizGradQuantum  int64
-	BixelSize         int
+	HistoScanHPerc    int
+	HistoThresPerc    int
 }
 
 //Number of frames to skip per iteration
@@ -26,14 +27,14 @@ func GetPreprocessParams() PreprocessParams {
 	pp.ByPassPreprocess1 = false
 	pp.ByPassPreprocess2 = false
 	pp.ByPassPreprocess3 = false
-	pp.ReducedFrameWidth = 600
 	pp.CropLeft = 300
 	pp.CropTop = 380
 	pp.CropRight = 180
 	pp.CropBottom = 180
 	pp.CellSize = 30
 	pp.HorizGradQuantum = 10000
-	pp.BixelSize = 40
+	pp.HistoScanHPerc = 50
+	pp.HistoThresPerc = 10
 
 	return pp
 }

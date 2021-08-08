@@ -10,7 +10,9 @@ import (
 
 func Preprocess3(out chan<- image.Image, in <-chan image.Image) {
 	bpp := utils.GetPreprocessParams().ByPassPreprocess3
-	col := color.RGBA{0, 255, 0, 255}
+	scanHPerc := utils.GetPreprocessParams().HistoScanHPerc
+	histoThresPerc := utils.GetPreprocessParams().HistoThresPerc
+	col := color.RGBA{255, 0, 0, 255}
 
 	for frame := range in {
 		if frame == nil {
@@ -28,10 +30,10 @@ func Preprocess3(out chan<- image.Image, in <-chan image.Image) {
 				out <- frame
 			} else {
 				//Proces here
-				horizLinesFrame := FindHorizLines(frame, col)
-				vertLinesFrame := FindVertLines(frame, col)
-				linesFrame := Merge(horizLinesFrame, vertLinesFrame, col)
-				out <- linesFrame
+				levels := HorizHistoLevels(frame, col, scanHPerc, histoThresPerc)
+				scanAreaFrame := ScanArea(frame, col, levels)
+				histoFrame := Overlay(frame, scanAreaFrame, 50)
+				out <- histoFrame
 			}
 
 		}
